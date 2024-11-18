@@ -1,0 +1,47 @@
+package cache
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"context"
+	"github.com/redis/go-redis/v9"
+)
+
+func main() {
+	ctx := context.Background()
+
+    // Create a new Redis client
+    rdb := redis.NewClient(&redis.Options{
+        Addr: "localhost:6379", // Address of the Redis server
+    })
+
+    // Ping the Redis server
+    pong, err := rdb.Ping(ctx).Result()
+    if err != nil {
+        log.Fatalf("Could not connect to Redis: %v", err)
+    }
+    fmt.Println(pong) // Should print PONG
+
+    // Set a key
+    err = rdb.Set(ctx, "key", "value", 0).Err()
+    if err != nil {
+        log.Fatalf("Could not set key: %v", err)
+    }
+
+    // Get the key
+    val, err := rdb.Get(ctx, "key").Result()
+    if err != nil {
+        log.Fatalf("Could not get key: %v", err)
+    }
+    fmt.Printf("key: %s\n", val) // Should print key: value
+    
+	
+	// Setup API endpoints
+    //http.HandleFunc("/enroll", api.EnrollHandler)
+    //http.HandleFunc("/verify", api.VerifyHandler)
+
+    // Start the server
+    fmt.Println("Server is running on port 8080")
+    log.Fatal(http.ListenAndServe(":8080", nil))
+}

@@ -1,0 +1,120 @@
+package main
+
+import (
+	"fmt"
+	"math/big"
+	// "bytes"
+	// "github.com/consensys/gnark-crypto/ecc"
+	// "github.com/consensys/gnark/backend/groth16"
+	// "github.com/consensys/gnark/frontend"
+	//  r1cs2 "github.com/consensys/gnark/frontend/cs/r1cs"
+
+	)
+
+func main() {
+	// Example pre-image
+	preImage := big.NewInt(42) // Replace with your test value
+
+	// Generate a proof
+	fmt.Println("Generating proof...")
+
+	proof, err := GenerateProof(preImage)
+	if err != nil {
+		fmt.Printf("Error generating proof: %v\n", err)
+		return
+	}
+	fmt.Print("Proof: ",proof)
+	fmt.Println("Proof generated successfully.")
+}
+	// // Verify the proof
+	// fmt.Println("Verifying proof...")
+	// isValid, err := VerifyProof(proof, vk, preImage)
+	// if err != nil {
+	// 	fmt.Printf("Error verifying proof: %v\n", err)
+	// 	return
+	// }
+
+	// if isValid {
+	// 	fmt.Println("Proof verification succeeded.")
+	// } else {
+	// 	fmt.Println("Proof verification failed.")
+	// }
+//}
+
+// // GenerateProofAndKeys computes the proof and returns the proof and verifying key
+// func GenerateProofAndKeys(preImage *big.Int) ([]byte, groth16.VerifyingKey, error) {
+// 	// Compute the hash of the pre-image using external MiMC
+// 	hash := mimcHash(preImage)
+
+// 	// Define and compile the circuit
+// 	var circuit Circuit
+// 	r1cs, err := frontend.Compile(ecc.BN254.ScalarField(), r1cs2.NewBuilder, &circuit)
+// 	if err != nil {
+// 		return nil, nil, fmt.Errorf("failed to compile circuit: %v", err)
+// 	}
+
+// 	// Setup keys
+// 	pk, vk, err := groth16.Setup(r1cs)
+// 	if err != nil {
+// 		return nil, nil, fmt.Errorf("failed to setup Groth16: %v", err)
+// 	}
+
+// 	// Assignment for the circuit
+// 	assignment := &Circuit{
+// 		PreImage: frontend.Variable(preImage),
+// 		Hash:     frontend.Variable(hash),
+// 	}
+
+// 	// Create a witness
+// 	witness, err := frontend.NewWitness(assignment, ecc.BN254.ScalarField())
+// 	if err != nil {
+// 		return nil, nil, fmt.Errorf("failed to create witness: %v", err)
+// 	}
+
+// 	// Generate the proof
+// 	proof, err := groth16.Prove(r1cs, pk, witness)
+// 	if err != nil {
+// 		return nil, nil, fmt.Errorf("failed to generate proof: %v", err)
+// 	}
+
+// 	// Serialize the proof
+// 	var buf bytes.Buffer
+// 	if _, err := proof.WriteTo(&buf); err != nil {
+// 		return nil, nil, fmt.Errorf("failed to serialize proof: %v", err)
+// 	}
+// 	proofBytes := buf.Bytes()
+
+// 	return proofBytes, vk, nil
+// }
+
+// // VerifyProof verifies the generated proof using the public witness and verifying key
+// func VerifyProof(proofBytes []byte, vk groth16.VerifyingKey, preImage *big.Int) (bool, error) {
+// 	// Deserialize the proof
+// 	var proof groth16.Proof
+// 	buf := bytes.NewReader(proofBytes)
+// 	if _, err := proof.ReadFrom(buf); err != nil {
+// 		return false, fmt.Errorf("failed to deserialize proof: %v", err)
+// 	}
+
+// 	// Compute the public input (hash)
+// 	hash := mimcHash(preImage)
+
+// 	// Assignment for public inputs
+// 	assignment := &Circuit{
+// 		Hash: frontend.Variable(hash), // Public input only
+// 	}
+
+// 	// Create a public witness
+// 	publicWitness, err := frontend.NewWitness(assignment, ecc.BN254.ScalarField(), frontend.PublicOnly())
+// 	if err != nil {
+// 		return false, fmt.Errorf("failed to create public witness: %v", err)
+// 	}
+
+// 	// Verify the proof
+// 	err = groth16.Verify(proof, vk, publicWitness)
+// 	if err != nil {
+// 		return false, fmt.Errorf("proof verification failed: %v", err)
+// 	}
+
+// 	return true, nil
+// }
