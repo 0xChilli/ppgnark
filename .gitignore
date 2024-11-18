@@ -1,3 +1,4 @@
 .env
 face_recognition/dataset/
 face_recognition/.python-version
+.DS_Store
